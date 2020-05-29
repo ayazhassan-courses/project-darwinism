@@ -49,5 +49,60 @@ def fitness_score(my_map,initial_pop):
     return r
         
 print(fitness_score(my_map,initial_pop))
-
+def partition(x,low,high):
+    i = low - 1
+    pivot = x[high][1]
+    for j in range(low,high):
+        if x[j][1]<pivot:
+            i = i+1 
+            x[i],x[j] = x[j],x[i]
+    x[i+1],x[high] = x[high],x[i+1] 
+    return ( i+1 )
+def sort(x,low,high):
+        if low<high:
+            u = partition(x,low,high)
+            sort(x, low, u-1) 
+            sort(x, u+1, high)
+    
+def quicksort(x):
+    low=0 
+    high= len(x) - 1
+    sort(x,low,high)
+    return x
+(quicksort(x))
+def selectparents(x):
+    parents= []
+    parents.append(x[0][0])
+    a = 1
+    for i in range(len(x)):
+        if x[i][0] not in parents:
+            parents.append(x[i][0])
+            a +=1
+        if a == 2:
+            break 
+    return parents
+parents = (selectparents(x))
+print(parents)
+parentscopy = parents.copy()
+parent1 = parentscopy.pop()
+parent2 = parentscopy.pop()
+import random
+def crossover(parent1,parent2):
+    child = []
+    if len(parent1)>len(parent2):
+        h = len(parent2)
+        g = len(parent1)
+        r = random.randint(0,h)
+        u = parent2
+    else:
+        h = len(parent1)
+        g = len(parent2)
+        r = random.randint(0,h)
+        u = parent1
+    for i in range(0,r):
+        child.append(u[i])
+    for j in range(r,g):
+        child.append(u[j])
+    return child
+print(crossover(parent1,parent2))
 
