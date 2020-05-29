@@ -49,5 +49,37 @@ def fitness_score(my_map,initial_pop):
     return r
         
 print(fitness_score(my_map,initial_pop))
-
-
+x = fitness_score(my_map,initial_pop))
+def partition(x,low,high):
+    i = low - 1
+    pivot = x[high][1]
+    for j in range(low,high):
+        if x[j][1]<pivot:
+            i = i+1 
+            x[i],x[j] = x[j],x[i]
+    x[i+1],x[high] = x[high],x[i+1] 
+    return ( i+1 )
+def sort(x,low,high):
+        if low<high:
+            u = partition(x,low,high)
+            sort(x, low, u-1) 
+            sort(x, u+1, high)
+    
+def quicksort(x):
+    low=0 
+    high= len(x) - 1
+    sort(x,low,high)
+    return x
+print(quicksort(x))
+def selectparent(x):
+    parent = []
+    parent.append(x[0][0])
+    a = 1
+    for i in range(len(x)):
+        if x[i][0] not in parent:
+            parent.append(x[i][0])
+            a +=1
+        if a == 4:
+            break 
+    return parent 
+print(selectparent(x))
