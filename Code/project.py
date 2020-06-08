@@ -106,3 +106,27 @@ def crossover(parent1,parent2):
     return child
 print(crossover(parent1,parent2))
 
+def valid_path(path,my_map):       #helper funtion to check if a given path is valid
+    start=0
+    end=len(path)-2
+    while start!=end:
+        check=False
+        for i in my_map[member[start]]:
+            if i[0] in my_map[member[start+1]]:
+                check=True
+        if check==False:
+            return False
+        else:
+            start+=1
+    return True
+
+def mutation(member,my_map):
+    x=len(member)-2
+    y=member.copy()
+    y.pop(x)
+    path=y
+    if valid_path(path,my_map)==True:
+        return path
+    else:
+        return member 
+print(mutation(member,my_map))
