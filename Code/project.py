@@ -111,8 +111,8 @@ def valid_path(path,my_map):       #helper funtion to check if a given path is v
     end=len(path)-2
     while start!=end:
         check=False
-        for i in my_map[member[start]]:
-            if i[0] in my_map[member[start+1]]:
+        for i in my_map[path[start]]:
+            if i[0] in my_map[path[start+1]]:
                 check=True
         if check==False:
             return False
