@@ -106,6 +106,8 @@ def crossover(parent1,parent2):
     return child
 print(crossover(parent1,parent2))
 
+member=(crossover(parent1,parent2))
+
 def valid_path(path,my_map):       #helper funtion to check if a given path is valid
     start=0
     end=len(path)-2
