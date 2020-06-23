@@ -61,42 +61,52 @@ def valid_child(path,my_map):  #helper funtion to check if a given path is valid
             if pa == x[0]:
                 check = True            
     return check
-#print(valid_child(["A","D","H"],my_map))
+#print(valid_child(["A","G","H"],my_map))
 import random
 def crossover(parent1,parent2,a = 0):
-    #print(parent1,parent2,"parameters to cross over")
-    a+=1
-    child = []
-    
-    if len(parent1)>len(parent2):
-        h = len(parent2)
-        g = len(parent1)
-        r = random.randint(0,h)
-        u = parent2
-        x = parent1
-        print(r)
+    if parent1 == parent2:
+        if valid_path(parent1,my_map)== True:
+            return parent1
+        elif valid_path(parent2,my_map)==True:
+            return parent2
+    else:
+        #print(parent1,parent2,"parameters to cross over")
+        a+=1
+        child = []
+        #print("parents",parent1,",", parent2)
         
-    else:
-        h = len(parent1)
-        g = len(parent2)
-        r = random.randint(0,h)
-        u = parent1
-        x = parent2
-    if a != h:
-        for i in range(0,r):
-            child.append(u[i])
-        for j in range(r,g):
-            child.append(x[j])
-
-        if valid_child(child,my_map) == True:
-            print("crossover resultt",child)
-            return child
+        if len(parent1)>len(parent2):
+            h = len(parent2)
+            g = len(parent1)
+            r = random.randint(0,h)
+            u = parent2
+            x = parent1
+            print(r)
+            
         else:
-            return crossover(parent1,parent2,a)
-    else:
-        print("crossover resultt",parent1)
-        return parent1
+            h = len(parent1)
+            g = len(parent2)
+            r = random.randint(0,h)
+            u = parent1
+            x = parent2
+        if a != h:
+            for i in range(0,r):
+                child.append(u[i])
+            for j in range(r,g):
+                child.append(x[j])
 
+            if valid_path(child,my_map) == True:
+                #print("crossover resultt",child)
+                return child
+            else:
+                return crossover(parent1,parent2,a)
+        else:
+            #print("crossover resultt",parent1)
+            if valid_path(parent1,my_map)==True:
+                return parent1
+            else:
+                return parent2
+#print(crossover(["A","B","H"],["A","B","D","H"],a = 0))
 
 def valid_path(path,my_map):       #helper funtion to check if a given path is valid
     start=0
@@ -110,7 +120,7 @@ def valid_path(path,my_map):       #helper funtion to check if a given path is v
                 return False
         else: return True
     else:
-        while start!=end:
+        while start!=end+1:
             check=False
             for i in my_map[path[start]]:
                 if i[0] == path[start+1]:
@@ -120,10 +130,10 @@ def valid_path(path,my_map):       #helper funtion to check if a given path is v
             else:
                 start+=1
         return True
-#print(valid_path(['A', 'E', 'A', 'C', 'A', 'E', 'A', 'F', 'D', 'B', 'D', 'B', 'A', 'F', 'D', 'B', 'H'],my_map))
+#print(valid_path(['A', 'B', 'H'],my_map))
 #member=crossover(parent1,parent2,a = 0)
 def mutation(member,my_map):
-    print(member,"parmeter to mutation")
+    #print(member,"parmeter to mutation")
     probability = random.randint(0,4)
     if probability<=2:
         #print(probability, "p1")
@@ -134,7 +144,7 @@ def mutation(member,my_map):
         y.pop(x)
         path=y
         if valid_path(path,my_map)==True:
-            print(path,"mutation result1")
+            #print(path,"mutation result1")
             return path
         else: 
             for i in my_map[member[x]]:
@@ -145,19 +155,19 @@ def mutation(member,my_map):
                             if probability<2:
                                 member.insert(x+1,i[0])
                                 if valid_path(member,my_map)==True:
-                                    print(member,"mutation result2")
+                                    #print(member,"mutation result2")
                                     return member
                             else:
                                 member.insert(x+1,i[0])
                                 member.pop(x)
                                 if valid_path(member,my_map)==True:
-                                    print(member,"mutation result3")
+                                    #print(member,"mutation result3")
                                     return member
                                 return z
-            print(z,"mutation result4")
+            #print(z,"mutation result4")
             return z
     else: 
-        print(member,"mutation result5")
+        #print(member,"mutation result5")
         return member
 
 #print(mutation(member,my_map),"mutated")
@@ -175,12 +185,20 @@ def new_member(my_map,source,destination):
             #if prospect[i][0] not in member:
             member.append(prospect[i][0])
             current+=1
-            
+            #else:
+                #while prospect[i][0] in member:
+                #    print(prospect[i][0], member)
+                #    i= random.randint(0,len(prospect)-1)
+                #member.append(prospect[i][0])
+                #current+=1
         else:
             check=False
-    print(member,"new member")
+    #print(member,"new member")
     return member
     
+#print(new_member(my_map,"A","H"))
+
+#current_pop=[['A', 'B', 'D', 'G', 'H'], ['A', 'C', 'D', 'G', 'D', 'H'], ['A', 'F', 'A', 'C', 'A', 'F', 'D', 'C', 'A', 'C', 'A', 'F', 'E', 'F', 'D', 'G', 'D', 'B', 'A', 'E', 'F', 'D', 'H']]
 
 def new_population(current_copy, my_map, source, destination):
     currently= current_copy
@@ -200,11 +218,10 @@ def new_population(current_copy, my_map, source, destination):
         children.append(member)
         
     for child in range(len(children)):
-        z = y.pop(0)
+        z = children.pop(0)
         mutated = mutation(z,my_map)
         children.append(mutated)
     #print(children,"children")
-
     for some in range(pop_size//2):
         children.append(new_member(my_map,source,destination))
     #print(children,"some more children")
@@ -220,6 +237,28 @@ def new_population(current_copy, my_map, source, destination):
     return new
 #print(new_population(current_pop, my_map, "A", "H"))
 
+def plot_gen(res,my_map,source,destination):
+    path=res[0]
+    fitness=res[1]
+    n=ord(source)-1
+    x=[]
+    y=[0]
+    for i in path:
+        x.append(ord(i)-n)
+    for j in range(len(path)-1):
+        for k in my_map[path[j]]:
+            if k[0]==path[j+1]:
+                y.append(k[1])
+                plt.scatter(x[j],y[j])
+    plt.scatter(x[len(x)-1],y[len(y)-1])
+    plt.plot(x,y)
+    plt.title("The fitness of the graph is "+str(fitness))
+   
+    plt.show()
+#plot_gen((['A', 'E', 'A', 'B', 'H'], 56),my_map,"A","H")
+
+
+
 def genetic_algo(gen_no, current_pop, my_map, source, destination):
     max_gen=10
     pop_size=3
@@ -232,6 +271,7 @@ def genetic_algo(gen_no, current_pop, my_map, source, destination):
         fitness = quicksort(fitness_score(my_map,current_pop))
         fittest = fitness[0]
         gen_no+= 1
+        print(plot_gen(fittest,my_map,source,destination))
         print("Genaration",gen_no,":",fittest)
         print("pop : ",fitness)
         genetic_algo(gen_no, current_pop, my_map, source, destination)
@@ -245,15 +285,16 @@ def genetic_algo(gen_no, current_pop, my_map, source, destination):
         fitness = quicksort(fitness_score(my_map,neww))
         fittest = fitness[0]
         gen_no+= 1
+        print(plot_gen(fittest,my_map,source,destination))
         print("Genaration",gen_no,":",fittest)
         print("pop : ",fitness)
         genetic_algo(gen_no, neww, my_map, source, destination)
 
     else:  
-        #current_pop = new_population(current_pop, my_map, source, destination)
-        #fitness = quicksort(fitness_score(my_map,current_pop))
-        #fittest = fitness[0]
         return 
 print(genetic_algo(0, [], my_map, "A", "H"))
+
+
+
 
 
